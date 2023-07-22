@@ -6,8 +6,7 @@
  * Dijkstra path-finding functions. Adapted from the Dijkstar Python project.
  *
  * Copyright (C) 2008
- *   Bex Edmondson
- *   Forked from: Wyatt Baldwin <self@wyattbaldwin.com>
+ *   Wyatt Baldwin <self@wyattbaldwin.com>
  *   All rights reserved
  *
  * Licensed under the MIT license.
@@ -46,16 +45,13 @@ var dijkstra = {
         adjacent_nodes,
         cost_of_e,
         cost_of_s_to_u_plus_cost_of_e,
-        int_cost_of_s_to_u_plus_cost_of_e,
         cost_of_s_to_v,
-        int_cost_of_s_to_v,
         first_visit;
     while (!open.empty()) {
       // In the nodes remaining in graph that have a known cost from s,
       // find the node, u, that currently has the shortest path from s.
       closest = open.pop();
       u = closest.value;
-
       cost_of_s_to_u = closest.cost;
 
       // Get nodes adjacent to u...
@@ -65,7 +61,7 @@ var dijkstra = {
       // the cost of the shortest paths to any or all of those nodes as
       // necessary. v is the node across the current edge from u.
       for (v in adjacent_nodes) {
-        if (v in adjacent_nodes) {
+        if (adjacent_nodes.hasOwnProperty(v)) {
           // Get the cost of the edge running from u to v.
           cost_of_e = adjacent_nodes[v];
 
@@ -80,37 +76,9 @@ var dijkstra = {
           // update v's predecessor in the predecessor list (it's now u).
           cost_of_s_to_v = costs[v];
           first_visit = (typeof costs[v] === 'undefined');
-
-          if (!first_visit)
-          {
-            if (typeof(cost_of_s_to_v) !== 'number') {
-              let split = cost_of_s_to_v.split("");
-              int_cost_of_s_to_v = 0;
-              split.forEach(char => {
-                int_cost_of_s_to_v += +char;
-              });
-            }
-            else {
-              int_cost_of_s_to_v = cost_of_s_to_v;
-            }
-
-            if (typeof(cost_of_s_to_u_plus_cost_of_e) !== 'number') {
-              let split = cost_of_s_to_u_plus_cost_of_e.split("");
-              int_cost_of_s_to_u_plus_cost_of_e = 0;
-              split.forEach(char => {
-                int_cost_of_s_to_u_plus_cost_of_e += +char;
-              });
-            }
-            else {
-              int_cost_of_s_to_u_plus_cost_of_e = cost_of_s_to_u_plus_cost_of_e;
-            }
-          }
-
-          if (first_visit || int_cost_of_s_to_v > int_cost_of_s_to_u_plus_cost_of_e) {
+          if (first_visit || cost_of_s_to_v > cost_of_s_to_u_plus_cost_of_e) {
             costs[v] = cost_of_s_to_u_plus_cost_of_e;
-
-            if (v !== d)
-            {open.push(v, cost_of_s_to_u_plus_cost_of_e);}
+            open.push(v, cost_of_s_to_u_plus_cost_of_e);
             predecessors[v] = u;
           }
         }
@@ -128,8 +96,10 @@ var dijkstra = {
   extract_shortest_path_from_predecessor_list: function(predecessors, d) {
     var nodes = [];
     var u = d;
+    var predecessor;
     while (u) {
       nodes.push(u);
+      predecessor = predecessors[u];
       u = predecessors[u];
     }
     nodes.reverse();
@@ -152,7 +122,7 @@ var dijkstra = {
           key;
       opts = opts || {};
       for (key in T) {
-        if (key in T) {
+        if (T.hasOwnProperty(key)) {
           t[key] = T[key];
         }
       }
