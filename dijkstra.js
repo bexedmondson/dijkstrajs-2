@@ -6,7 +6,8 @@
  * Dijkstra path-finding functions. Adapted from the Dijkstar Python project.
  *
  * Copyright (C) 2008
- *   Wyatt Baldwin <self@wyattbaldwin.com>
+ *   Bex Edmondson
+ *   Forked from: Wyatt Baldwin <self@wyattbaldwin.com>
  *   All rights reserved
  *
  * Licensed under the MIT license.
@@ -45,13 +46,16 @@ var dijkstra = {
         adjacent_nodes,
         cost_of_e,
         cost_of_s_to_u_plus_cost_of_e,
+        int_cost_of_s_to_u_plus_cost_of_e,
         cost_of_s_to_v,
+        int_cost_of_s_to_v,
         first_visit;
     while (!open.empty()) {
       // In the nodes remaining in graph that have a known cost from s,
       // find the node, u, that currently has the shortest path from s.
       closest = open.pop();
       u = closest.value;
+
       cost_of_s_to_u = closest.cost;
 
       // Get nodes adjacent to u...
@@ -76,9 +80,37 @@ var dijkstra = {
           // update v's predecessor in the predecessor list (it's now u).
           cost_of_s_to_v = costs[v];
           first_visit = (typeof costs[v] === 'undefined');
-          if (first_visit || cost_of_s_to_v > cost_of_s_to_u_plus_cost_of_e) {
+
+          if (!first_visit)
+          {
+            if (typeof(cost_of_s_to_v) !== 'number') {
+              let split = cost_of_s_to_v.split("");
+              int_cost_of_s_to_v = 0;
+              split.forEach(char => {
+                int_cost_of_s_to_v += +char;
+              });
+            }
+            else {
+              int_cost_of_s_to_v = cost_of_s_to_v;
+            }
+
+            if (typeof(cost_of_s_to_u_plus_cost_of_e) !== 'number') {
+              let split = cost_of_s_to_u_plus_cost_of_e.split("");
+              int_cost_of_s_to_u_plus_cost_of_e = 0;
+              split.forEach(char => {
+                int_cost_of_s_to_u_plus_cost_of_e += +char;
+              });
+            }
+            else {
+              int_cost_of_s_to_u_plus_cost_of_e = cost_of_s_to_u_plus_cost_of_e;
+            }
+          }
+
+          if (first_visit || int_cost_of_s_to_v > int_cost_of_s_to_u_plus_cost_of_e) {
             costs[v] = cost_of_s_to_u_plus_cost_of_e;
-            open.push(v, cost_of_s_to_u_plus_cost_of_e);
+
+            if (v !== d)
+            {open.push(v, cost_of_s_to_u_plus_cost_of_e);}
             predecessors[v] = u;
           }
         }
