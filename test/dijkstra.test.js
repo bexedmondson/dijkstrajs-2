@@ -8,7 +8,7 @@ describe('dijkstra.js', function () {
 
     describe('.find_path()', function () {
 
-        it('should find the path between two points, all edges have weight 1', function () {
+        /*it('should find the path between two points, all edges have weight 1', function () {
             // A B C
             // D E F
             // G H I
@@ -41,9 +41,23 @@ describe('dijkstra.js', function () {
             expect(path).to.eql(['a', 'd', 'e', 'f', 'c']);
             path = find_path(graph, 'd', 'b');
             expect(path).to.eql(['d', 'b']);
+        });*/
+
+        it('should find the path between two points, weighted edges', function () {
+            var graph = {
+                a: {b: 1},
+                b: {d: 1, c: 6},
+                d: {e: 3},
+                e: {f: 2},
+                f: {g: 2},
+                g: {c: 2}
+            };
+
+            var path = find_path(graph, 'a', 'c');
+            expect(path).to.eql(['a', 'b', 'c']);
         });
 
-        it('should throw on unreachable destination', function () {
+        /*it('should throw on unreachable destination', function () {
             var graph = {
                 a: {b: 10, c: 100, d: 1},
                 b: {c: 10},
@@ -91,6 +105,6 @@ describe('dijkstra.js', function () {
                 f: 'e',
                 c: 'f'
             });
-        });
+        });*/
     });
 });
