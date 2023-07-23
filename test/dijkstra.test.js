@@ -8,7 +8,7 @@ describe('dijkstra.js', function () {
 
     describe('.find_path()', function () {
 
-        /*it('should find the path between two points, all edges have weight 1', function () {
+        it('should find the path between two points, all edges have weight 1', function () {
             // A B C
             // D E F
             // G H I
@@ -41,7 +41,7 @@ describe('dijkstra.js', function () {
             expect(path).to.eql(['a', 'd', 'e', 'f', 'c']);
             path = find_path(graph, 'd', 'b');
             expect(path).to.eql(['d', 'b']);
-        });*/
+        });
 
         it('should find the path between two points, weighted edges', function () {
             var graph = {
@@ -57,7 +57,7 @@ describe('dijkstra.js', function () {
             expect(path).to.eql(['a', 'b', 'c']);
         });
 
-        /*it('should throw on unreachable destination', function () {
+        it('should throw on unreachable destination', function () {
             var graph = {
                 a: {b: 10, c: 100, d: 1},
                 b: {c: 10},
@@ -83,6 +83,19 @@ describe('dijkstra.js', function () {
 
             expect(function () { find_path(graph, 'a', 'z'); }).to.throwException();
         });
+
+        it('should throw on non-number edge weight', function () {
+            var graph = {
+                a: {b: "10", c: 100, d: 1},
+                b: {c: 10},
+                d: {b: 1, e: 1},
+                e: {f: 1},
+                f: {c: 1},
+                g: {b: 1}
+            };
+
+            expect(function () { find_path(graph, 'a', 'c'); }).to.throwException();
+        });
     });
 
     describe('.single_source_shortest_paths()', function () {
@@ -105,6 +118,6 @@ describe('dijkstra.js', function () {
                 f: 'e',
                 c: 'f'
             });
-        });*/
+        });
     });
 });

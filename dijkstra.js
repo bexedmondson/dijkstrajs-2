@@ -61,9 +61,14 @@ var dijkstra = {
       // the cost of the shortest paths to any or all of those nodes as
       // necessary. v is the node across the current edge from u.
       for (v in adjacent_nodes) {
-        if (adjacent_nodes.hasOwnProperty(v)) {
+        if (v in adjacent_nodes) {
           // Get the cost of the edge running from u to v.
           cost_of_e = adjacent_nodes[v];
+
+          if (typeof(cost_of_e) !== 'number') {
+            var msg1 = ['Cost of edge from ', u, ' to ', v, ' is not a number! Type:', typeof(cost_of_e)].join('');
+            throw new Error(msg1);
+          }
 
           // Cost of s to u plus the cost of u to v across e--this is *a*
           // cost from s to v that may or may not be less than the current
@@ -86,8 +91,8 @@ var dijkstra = {
     }
 
     if (typeof d !== 'undefined' && typeof costs[d] === 'undefined') {
-      var msg = ['Could not find a path from ', s, ' to ', d, '.'].join('');
-      throw new Error(msg);
+      var msg2 = ['Could not find a path from ', s, ' to ', d, '.'].join('');
+      throw new Error(msg2);
     }
 
     return predecessors;
@@ -96,10 +101,8 @@ var dijkstra = {
   extract_shortest_path_from_predecessor_list: function(predecessors, d) {
     var nodes = [];
     var u = d;
-    var predecessor;
     while (u) {
       nodes.push(u);
-      predecessor = predecessors[u];
       u = predecessors[u];
     }
     nodes.reverse();
@@ -122,7 +125,7 @@ var dijkstra = {
           key;
       opts = opts || {};
       for (key in T) {
-        if (T.hasOwnProperty(key)) {
+        if (key in T) {
           t[key] = T[key];
         }
       }
