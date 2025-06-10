@@ -163,6 +163,6 @@ var dijkstra = {
 
 
 // node.js module exports
-if (typeof module !== 'undefined') {
+//if (typeof module !== 'undefined') {
   module.exports = dijkstra;
-}
+//}
